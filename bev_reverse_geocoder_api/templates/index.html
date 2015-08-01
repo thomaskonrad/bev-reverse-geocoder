@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load l10n %}
+
+{% block jumbotron %}
+
+{% endblock %}
+
+{% block content %}
+    <h1>BEV Address Data Reverse Geocoder</h1>
+
+    <p>Welcome to the Reverse Geocoder for the Address data released by the Bundesamt für Eich- und Vermessungswesen
+    (BEV) in Austria! This services converts coordinates into an array of address data sets.</p>
+
+    <h2>Example</h2>
+
+    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+        <li class="active"><a href="#json" data-toggle="tab">JSON</a></li>
+        <li><a href="#xml" data-toggle="tab">XML</a></li>
+    </ul>
+    <div id="my-tab-content" class="tab-content">
+        <div class="tab-pane active" id="json">
+            <h3>JSON</h3>
+
+            <p><a href="reverse-geocode/json?lat=16.37236&lon=48.20808&distance=50&limit=3&epsg=4326" class="btn btn-primary btn-lg">Try it yourself!</a></p>
+
+            <pre>http://osm.thomaskonrad.at/bev-reverse-geocoder/reverse-geocode/json?lat=16.37236&lon=48.20808&distance=50&limit=3&epsg=4326</pre>
+
+    <pre>{
+   "results":[
+      {
+         "municipality":"Wien",
+         "distance":9.909445595,
+         "street":"Stephansplatz",
+         "postcode":"1010",
+         "house_number":"2",
+         "house_name":""
+      },
+      {
+         "municipality":"Wien",
+         "distance":13.94313933,
+         "street":"Stephansplatz",
+         "postcode":"1010",
+         "house_number":"3A",
+         "house_name":""
+      },
+      {
+         "municipality":"Wien",
+         "distance":18.571775124,
+         "street":"Stock-im-Eisen-Platz",
+         "postcode":"1010",
+         "house_number":"1",
+         "house_name":""
+      }
+   ],
+   "status":"ok"
+}</pre>
+        </div>
+        <div class="tab-pane" id="xml">
+            <h3>XML</h3>
+
+            <p><a href="reverse-geocode/xml?lat=16.37236&lon=48.20808&distance=50&limit=3&epsg=4326" class="btn btn-primary btn-lg">Try it yourself!</a></p>
+
+            <pre>http://osm.thomaskonrad.at/bev-reverse-geocoder/reverse-geocode/xml?lat=16.37236&lon=48.20808&distance=50&limit=3&epsg=4326</pre>
+
+    <pre>&lt;reverse_geocode_results&gt;
+    &lt;status&gt;ok&lt;/status&gt;
+    &lt;results&gt;
+        &lt;address&gt;
+            &lt;municipality&gt;Wien&lt;/municipality&gt;
+            &lt;street&gt;Stephansplatz&lt;/street&gt;
+            &lt;house_number&gt;2&lt;/house_number&gt;
+            &lt;postcode&gt;1010&lt;/postcode&gt;
+            &lt;distance&gt;9.909445595&lt;/distance&gt;
+            &lt;house_name/&gt;
+        &lt;/address&gt;
+        &lt;address&gt;
+            &lt;municipality&gt;Wien&lt;/municipality&gt;
+            &lt;street&gt;Stephansplatz&lt;/street&gt;
+            &lt;house_number&gt;3A&lt;/house_number&gt;
+            &lt;postcode&gt;1010&lt;/postcode&gt;
+            &lt;distance&gt;13.94313933&lt;/distance&gt;
+            &lt;house_name/&gt;
+        &lt;/address&gt;
+        &lt;address&gt;
+            &lt;municipality&gt;Wien&lt;/municipality&gt;
+            &lt;street&gt;Stock-im-Eisen-Platz&lt;/street&gt;
+            &lt;house_number&gt;1&lt;/house_number&gt;
+            &lt;postcode&gt;1010&lt;/postcode&gt;
+            &lt;distance&gt;18.571775124&lt;/distance&gt;
+            &lt;house_name/&gt;
+        &lt;/address&gt;
+    &lt;/results&gt;
+&lt;/reverse_geocode_results&gt;</pre>
+        </div>
+
+    </div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function ($) {
+            $('#tabs').tab();
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+    <h2>API Definition</h2>
+
+    <p>These are the parameters that can be passed to the API:</p>
+
+    <dl class="dl-horizontal">
+        <dt><code>lat</code></dt>
+        <dd>The latitude value of the coordinates. Must make sense according to the EPSG code you specify.</dd>
+
+        <dt><code>lon</code></dt>
+        <dd>The longitude value of the coordinates. Must make sense according to the EPSG you specify.</dd>
+
+        <dt><code>distance</code></dt>
+        <dd>The radius around the point you specified where addresses should be included in meters.
+            <br /><strong>Minimum:</strong> 0. <strong>Maximum:</strong> 100. <strong>Default:</strong> 30.</dd>
+
+        <dt><code>limit</code></dt>
+        <dd>The maximum number of address data sets to be returned.
+            <br /><strong>Minimum:</strong> 1. <strong>Maximum:</strong> 10. <strong>Default:</strong> 5.</dd>
+
+        <dt><code>epsg</code></dt>
+        <dd>The EPSG code for the spatial reference system by which you specify your coordinates. Many of them are
+            supported, for example: <a href="http://www.spatialreference.org/ref/epsg/4326/" target="_blank">EPSG 4326 (WGS 84)</a>,
+            <a href="http://spatialreference.org/ref/sr-org/6864/" target="_blank">EPSG:3857 / EPSG 900913</a> (the one used internally
+            by OpenStreetMap), <a href="http://www.spatialreference.org/ref/epsg/31287/" target="_blank">31287 (Austria Lambert)</a>.
+            <br /><strong>Default:</strong> 4326 (WGS 84).</dd>
+    </dl>
+
+
+    <h2>Usage Limits</h2>
+
+    <p>You are free to use the service without any restrictions, If, however, I notice excessive usage by a service,
+    IP address or IP range, I will not hesitate to block it if it soaks up too much of the server resources. So please
+    be fair when using this service.</p>
+{% endblock %}
