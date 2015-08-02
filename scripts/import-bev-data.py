@@ -61,7 +61,7 @@ def main():
                 if len(line) == 7 and is_float(line[5]) and is_float(line[6]):
                     try:
                         cursor.execute(statement, (
-                            line[0], int(line[1]), line[2], line[3], line[4], line[5], line[6],)
+                            line[0], int(line[1]), line[2], line[3], line[4], line[6], line[5],)
                                        )
                     except Exception as e:
                         print("I can't insert the row '%s'! The exception was: %s" % (line, e,))
