@@ -113,7 +113,7 @@ def reverse_geocode(request, format):
         }
         return HttpResponseServerError(get_response_content(result, format), content_type=get_content_type(format))
 
-    result = {'status': 'ok', 'results': dict_result}
+    result = {'status': 'ok', 'copyright': '© Österreichisches Adressregister, Stichtagsdaten vom 15.07.2015', 'results': dict_result}
 
     return HttpResponse(get_response_content(result, format), content_type=get_content_type(format))
 
