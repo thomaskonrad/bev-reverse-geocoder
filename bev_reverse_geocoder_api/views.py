@@ -90,7 +90,8 @@ def reverse_geocode(request, format):
 
     statement = """
         select b.municipality, b.postcode, b.street, b.house_number, b.house_name,
-          ST_Distance(ST_SetSRID(ST_MakePoint(%s, %s),%s), b.point) as distance
+          ST_Distance(ST_SetSRID(ST_MakePoint(%s, %s),%s), b.point) as distance,
+          ST_X(ST_Transform(point::geometry, %s)) as lat, ST_Y(ST_Transform(point::geometry, %s)) as lon
         from bev_addresses b
         where ST_DWithin(ST_SetSRID(ST_MakePoint(%s, %s),%s), b.point, %s)
         order by distance
@@ -98,7 +99,7 @@ def reverse_geocode(request, format):
     """
 
     try:
-        cursor.execute(statement, (lat, lon, epsg, lat, lon, epsg, distance, limit,))
+        cursor.execute(statement, (lat, lon, epsg, epsg, epsg, lat, lon, epsg, distance, limit,))
         sql_result = cursor.fetchall()
 
         # Convert the result from psycopg2.extras.RealDictRow back to a usual dict.
