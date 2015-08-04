@@ -73,6 +73,16 @@ def main():
     else:
         print("Unable to open the file '%s' as it does not exist." % args.file)
 
+    # Make an "educated guess" about whether the address contains a proper street or a locality as the street name.
+    try:
+        cursor.execute("update bev_addresses set address_type='place'  where street     in (select name from bev_localities);")
+        cursor.execute("update bev_addresses set address_type='street' where street not in (select name from bev_localities);")
+    except Exception as e:
+        print("Cannot set the address type! The exception was: %s" % (e,))
+        conn.rollback()
+        conn.close()
+        sys.exit(1)
+
     # Commit all changes and close the connection.
     conn.commit()
     conn.close()
