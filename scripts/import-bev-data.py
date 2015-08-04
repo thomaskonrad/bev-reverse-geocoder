@@ -55,7 +55,7 @@ def main():
             next(f)
 
             for line in csv.reader(f, quotechar='"', delimiter=";", quoting=csv.QUOTE_MINIMAL):
-                statement = "INSERT INTO " + args.table + " VALUES (%s, %s, %s, %s, %s, ST_SetSRID(ST_MakePoint(%s, %s),4326))"
+                statement = "INSERT INTO " + args.table + " VALUES (%s, %s, %s, %s, %s, null, ST_SetSRID(ST_MakePoint(%s, %s),4326))"
 
                 # Do some basic data validation.
                 if len(line) == 7 and is_float(line[5]) and is_float(line[6]):
