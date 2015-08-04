@@ -91,7 +91,7 @@ def reverse_geocode(request, format):
         return HttpResponseBadRequest(get_response_content(result, format), content_type=get_content_type(format))
 
     statement = """
-        select b.municipality, b.postcode, b.street, b.house_number, b.house_name,
+        select b.municipality, b.postcode, b.street, b.house_number, b.house_name, b.address_type,
           ST_Distance(ST_SetSRID(ST_MakePoint(%s, %s),%s), b.point) as distance,
           ST_X(ST_Transform(point::geometry, %s)) as lat, ST_Y(ST_Transform(point::geometry, %s)) as lon
         from bev_addresses b
