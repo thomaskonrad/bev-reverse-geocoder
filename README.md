@@ -3,7 +3,7 @@ BEV Address Data Reverse Geocoder
 
 This services converts coordinates into an array of address data sets released by the Bundesamt für Eich- und
 Vermessungswesen (BEV) in Austria. You can see the service in action and an API description
-[here](http://bev-reverse-geocoder.osm.thomaskonrad.at/).
+[here](https://bev-reverse-geocoder.thomaskonrad.at/).
 
 Data: © Österreichisches Adressregister, Stichtagsdaten vom 15.07.2015
 
@@ -13,7 +13,7 @@ Example
 The request
 
 ```
-http://bev-reverse-geocoder.osm.thomaskonrad.at/reverse-geocode/json?lat=48.20808&lon=16.37236&distance=50&limit=3&epsg=4326
+https://bev-reverse-geocoder.thomaskonrad.at/reverse-geocode/json?lat=48.20808&lon=16.37236&distance=50&limit=3&epsg=4326
 ```
 
 gives the following result:
