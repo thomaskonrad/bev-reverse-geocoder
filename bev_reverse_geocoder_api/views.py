@@ -101,7 +101,7 @@ def reverse_geocode(request, format):
     """
 
     try:
-        cursor.execute(statement, (lat, lon, epsg, epsg, epsg, lat, lon, epsg, distance, limit,))
+        cursor.execute(statement, (lon, lat, epsg, epsg, epsg, lon, lat, epsg, distance, limit,))
         sql_result = cursor.fetchall()
 
         # Convert the result from psycopg2.extras.RealDictRow back to a usual dict.
