@@ -5,7 +5,7 @@ This services converts coordinates into an array of address data sets released b
 Vermessungswesen (BEV) in Austria. You can see the service in action and an API description
 [here](https://bev-reverse-geocoder.thomaskonrad.at/).
 
-Data: © Österreichisches Adressregister, Stichtagsdaten vom 15.07.2015
+Data: © Österreichisches Adressregister, Stichtagsdaten vom 02.10.2016
 
 Example
 -------
@@ -53,6 +53,6 @@ gives the following result:
          "lon":48.208116
       }
    ],
-   "copyright":"\u00a9 \u00d6sterreichisches Adressregister, Stichtagsdaten vom 15.07.2015"
+   "copyright":"\u00a9 \u00d6sterreichisches Adressregister, Stichtagsdaten vom 02.10.2016"
 }
 ```
