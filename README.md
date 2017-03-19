@@ -5,7 +5,7 @@ This services converts coordinates into an array of address data sets released b
 Vermessungswesen (BEV) in Austria. You can see the service in action and an API description
 [here](https://bev-reverse-geocoder.thomaskonrad.at/).
 
-Data: © Österreichisches Adressregister, Stichtagsdaten vom 02.10.2016
+Data: © Österreichisches Adressregister 2017, N 23806/2017 (Stichtagsdaten vom 02.10.2016)
 
 Example
 -------
@@ -53,6 +53,39 @@ gives the following result:
          "lon":48.208116
       }
    ],
-   "copyright":"\u00a9 \u00d6sterreichisches Adressregister, Stichtagsdaten vom 02.10.2016"
+   "copyright":"\u00a9 \u00d6sterreichisches Adressregister 2017, N 23806/2017 (Stichtagsdaten vom 02.10.2016)"
 }
 ```
+
+Requirements
+------------
+
+This Python Django project requires Django 1.10.*.
+
+Importing the Addresses into PostgreSQL
+---------------------------------------
+
+In order to import the data into the database, execute the ``scripts/create-tables.sql`` script on your PostgreSQL
+database instance first. This script deletes all relevant tables (if they exist) and then creates them.
+
+To download and convert the data into a usable format, use the
+[convert-bev-address-data-python](https://github.com/scubbx/convert-bev-address-data-python) script of the user
+_scubbx_. Before you run the Python script, install the modules ``gdal`` and ``argparse`` by issuing the command
+``pip install gdal argparse``. The script downloads the data from BEV and converts it into EPSG 4326 by issuing the
+following command:
+
+    python convert-addresses.py -epsg 4326
+
+This outputs a file called ``bev_addressesEPSG4326.csv``. We can now use this file to import the address data into our
+PostgreSQL database:
+
+    python scripts/import-bev-data.py -d gis -f /path/to/bev_addressesEPSG4326.csv -D "2016-10-02"
+
+With the ``-D`` parameter you can specify the date the data was released in the format ``YYYY-MM-DD``. This is important
+for the correct copyright statement when using the data in OpenStreetMap.
+
+Using the Data in OpenStreetMap
+-------------------------------
+
+OpenStreetMap has the [official permission to use the data](https://wiki.openstreetmap.org/wiki/WikiProject_Austria/%C3%96sterreichisches_Adressregister).
+Keep in mind, however, that the data source must be mentioned in the object or changeset source.
