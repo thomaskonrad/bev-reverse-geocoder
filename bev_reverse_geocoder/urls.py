@@ -1,7 +1,8 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
+from bev_reverse_geocoder_api.views import index, reverse_geocode
 # from django.contrib import admin
 
-urlpatterns = patterns('',
-    url(r'^$', 'bev_reverse_geocoder_api.views.index', name='index'),
-    url(r'^reverse-geocode/(?P<format>\w+)$', 'bev_reverse_geocoder_api.views.reverse_geocode', name='reverse_geocode'),
-)
+urlpatterns = [
+    url(r'^$', index, name='index'),
+    url(r'^reverse-geocode/(?P<format>\w+)$', reverse_geocode, name='reverse_geocode'),
+]

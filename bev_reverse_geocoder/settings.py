@@ -22,7 +22,6 @@ SECRET_KEY = '(ync6bf)uc)9_-u-lz75ql-9j2a(+#he5s_0#*7v$z00&-_pyh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -52,6 +51,12 @@ ROOT_URLCONF = 'bev_reverse_geocoder.urls'
 
 WSGI_APPLICATION = 'bev_reverse_geocoder.wsgi.application'
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True
+    }
+]
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
@@ -76,7 +81,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR,  'templates'),
-)
