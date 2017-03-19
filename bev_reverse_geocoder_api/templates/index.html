@@ -14,7 +14,7 @@
     (BEV) in Austria! This services converts coordinates into an array of address data sets. The source code of this
     application can be found <a href="https://github.com/thomaskonrad/bev-reverse-geocoder">here</a>.</p>
 
-    <div class="alert alert-success" role="alert"><strong>Data</strong>: © Österreichisches Adressregister, Stichtagsdaten vom 02.10.2016</div>
+    <div class="alert alert-success" role="alert"><strong>Data</strong>: © Österreichisches Adressregister 2017, N 23806/2017 (Stichtagsdaten vom {{ date }})</div>
 
     <h2>Example</h2>
 
@@ -31,7 +31,7 @@
             <pre>https://bev-reverse-geocoder.thomaskonrad.at/reverse-geocode/json?lat=48.20808&lon=16.37236&distance=50&limit=3&epsg=4326</pre>
 
     <pre>{
-   "copyright":"\u00a9 \u00d6sterreichisches Adressregister, Stichtagsdaten vom 02.10.2016",
+   "copyright":"\u00a9 \u00d6sterreichisches Adressregister 2017, N 23806/2017 (Stichtagsdaten vom {{ date }})",
    "results":[
       {
          "lon":16.372235,
@@ -78,7 +78,7 @@
             <pre>https://bev-reverse-geocoder.thomaskonrad.at/reverse-geocode/xml?lat=48.20808&lon=16.37236&distance=50&limit=3&epsg=4326</pre>
 
     <pre>&lt;reverse_geocode_results&gt;
-    &lt;copyright&gt;© Österreichisches Adressregister, Stichtagsdaten vom 02.10.2016&lt;/copyright&gt;
+    &lt;copyright&gt;© © Österreichisches Adressregister 2017, N 23806/2017 (Stichtagsdaten vom {{ date }})&lt;/copyright&gt;
     &lt;results&gt;
         &lt;address&gt;
             &lt;lon&gt;16.372235&lt;/lon&gt;

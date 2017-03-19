@@ -11,7 +11,27 @@ from .dicttoxml import DictToXML
 
 
 def index(request):
-    return render(request, 'index.html')
+    # Try to connect
+    try:
+        conn = psycopg2.connect(
+            database="gis"
+        )
+
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+        cursor.execute("SELECT date FROM bev_date;")
+        sql_result = cursor.fetchall()
+
+        date = sql_result[0]['date'].strftime('%d.%m.%Y')
+    except Exception as e:
+        result = {
+            "status": "server_error",
+            "message": "The web application was unable to connect to the database. Please inform the site " +
+                       "administrator about this issue."
+        }
+        return HttpResponseServerError(json.dumps(result), content_type="application/json")
+
+    return render(request, context={'date': date}, template_name='index.html')
 
 
 def is_float(value):
@@ -65,6 +85,7 @@ def reverse_geocode(request, format):
         }
         return HttpResponseBadRequest(get_response_content(result, format), content_type=get_content_type(format))
 
+    epsg = int(epsg)
     epsg_statement = "SELECT srid from spatial_ref_sys WHERE srid=%s"
     cursor.execute(epsg_statement, (epsg,))
     epsg_result = cursor.fetchall()
@@ -89,6 +110,21 @@ def reverse_geocode(request, format):
             "message": "The limit parameter must be an integer between 1 and %s." % max_limit
         }
         return HttpResponseBadRequest(get_response_content(result, format), content_type=get_content_type(format))
+
+
+    # Get the data release date and format it.
+    try:
+        cursor.execute("SELECT date FROM bev_date;")
+        sql_result = cursor.fetchall()
+
+        date = sql_result[0]['date'].strftime('%d.%m.%Y')
+    except Exception as e:
+        result = {
+            "status": "server_error",
+            "message": "Could not get the release date of the BEV data."
+        }
+        return HttpResponseServerError(get_response_content(result, format), content_type=get_content_type(format))
+
 
     statement = """
         select b.municipality, b.postcode, b.street, b.house_number, b.house_name, b.address_type,
@@ -116,7 +152,7 @@ def reverse_geocode(request, format):
         }
         return HttpResponseServerError(get_response_content(result, format), content_type=get_content_type(format))
 
-    result = {"status": "ok", "copyright": u"© Österreichisches Adressregister, Stichtagsdaten vom 02.10.2016", "results": dict_result}
+    result = {"status": "ok", "copyright": u"© Österreichisches Adressregister 2017, N 23806/2017 (Stichtagsdaten vom %s)" % (date), "results": dict_result}
 
     return HttpResponse(get_response_content(result, format), content_type=get_content_type(format))
 

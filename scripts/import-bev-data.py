@@ -24,15 +24,17 @@ def main():
     parser.add_argument("-u", "--user", dest="user", required=False, help="The database user")
     parser.add_argument("-p", "--password", dest="password", required=False, help="The database password")
     parser.add_argument("-f", "--file", dest="file", required=True, help="The file to read from")
+    parser.add_argument("-D", "--date", dest="date", required=True,
+                        help="The date the data is from in the format '2016-10-02'.")
     args = parser.parse_args()
 
     # Try to connect
     try:
         conn = psycopg2.connect(
-            host=args.hostname,
-            database=args.database,
-            user=args.user,
-            password=args.password
+                host=args.hostname,
+                database=args.database,
+                user=args.user,
+                password=args.password
         )
     except Exception as e:
         print("I am unable to connect to the database (%s)." % e.message)
@@ -41,6 +43,17 @@ def main():
     cursor = conn.cursor()
 
     if os.path.isfile(args.file):
+        # Insert the date
+        try:
+            statement = "TRUNCATE TABLE bev_date"
+            cursor.execute(statement)
+            statement = "INSERT INTO bev_date VALUES(%s)"
+            cursor.execute(statement, (args.date,))
+        except:
+            print("Unable to insert the date. Is the format correct?")
+            sys.exit(1)
+
+
         # Drop all data
         try:
             statement = "TRUNCATE TABLE " + args.table
@@ -69,14 +82,17 @@ def main():
                         conn.close()
                         sys.exit(1)
                 else:
-                    print("There is something wrong with this line: '%s'. Please check if the column count is 7 and the data types are correct." % line)
+                    print(
+                        "There is something wrong with this line: '%s'. Please check if the column count is 7 and the data types are correct." % line)
     else:
         print("Unable to open the file '%s' as it does not exist." % args.file)
 
     # Make an "educated guess" about whether the address contains a proper street or a locality as the street name.
     try:
-        cursor.execute("update bev_addresses set address_type='place'  where street     in (select name from bev_localities);")
-        cursor.execute("update bev_addresses set address_type='street' where street not in (select name from bev_localities);")
+        cursor.execute(
+            "update bev_addresses set address_type='place'  where street     in (select name from bev_localities);")
+        cursor.execute(
+            "update bev_addresses set address_type='street' where street not in (select name from bev_localities);")
     except Exception as e:
         print("Cannot set the address type! The exception was: %s" % (e,))
         conn.rollback()
