@@ -111,20 +111,18 @@ def reverse_geocode(request, format):
         }
         return HttpResponseBadRequest(get_response_content(result, format), content_type=get_content_type(format))
 
-
     # Get the data release date and format it.
     try:
         cursor.execute("SELECT date FROM bev_date;")
         sql_result = cursor.fetchall()
 
-        date = sql_result[0]['date'].strftime('%d.%m.%Y')
+        date = sql_result[0]['date']
     except Exception as e:
         result = {
             "status": "server_error",
             "message": "Could not get the release date of the BEV data."
         }
         return HttpResponseServerError(get_response_content(result, format), content_type=get_content_type(format))
-
 
     statement = """
         select b.municipality, b.postcode, b.street, b.house_number, b.house_name, b.address_type,
@@ -147,12 +145,14 @@ def reverse_geocode(request, format):
     except Exception as e:
         result = {
             "status": "server_error",
-            "message": "There was a problem querying the database. Please verify that the parameters you submitted (" +
-                       "especially the coordinates according to the EPSG you specified) make sense."
+            "message": "There was a problem querying the database. Please verify that the parameters you submitted " +
+                       "(especially the coordinates according to the EPSG you specified) make sense."
         }
         return HttpResponseServerError(get_response_content(result, format), content_type=get_content_type(format))
 
-    result = {"status": "ok", "copyright": u"© Österreichisches Adressregister 2017, N 23806/2017 (Stichtagsdaten vom %s)" % (date), "results": dict_result}
+    result = {"status": "ok",
+              "copyright": u"© Österreichisches Adressregister 2017, N 23806/2017 (Stichtagsdaten vom %s)" % (
+              date.strftime('%d.%m.%Y')), "address_date": date.strftime('%Y-%m-%d'), "results": dict_result}
 
     return HttpResponse(get_response_content(result, format), content_type=get_content_type(format))
 
@@ -161,7 +161,7 @@ def get_response_content(dictionary, format):
     if format == 'json':
         return json.dumps(dictionary)
     elif format == 'xml':
-        xml = DictToXML({"reverse_geocode_results": dictionary},  list_mappings={"results": "address"})
+        xml = DictToXML({"reverse_geocode_results": dictionary}, list_mappings={"results": "address"})
         return xml.get_string()
 
     return ""
