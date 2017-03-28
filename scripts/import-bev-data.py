@@ -87,17 +87,23 @@ def main():
     else:
         print("Unable to open the file '%s' as it does not exist." % args.file)
 
-    # Make an "educated guess" about whether the address contains a proper street or a locality as the street name.
     try:
+        # Make an "educated guess" about whether the address contains a proper street or a locality as the street name.
         cursor.execute(
-            "update bev_addresses set address_type='place'  where street     in (select name from bev_localities);")
+            "UPDATE bev_addresses SET address_type='place'  WHERE street     IN (SELECT name FROM bev_localities);")
         cursor.execute(
-            "update bev_addresses set address_type='street' where street not in (select name from bev_localities);")
+            "UPDATE bev_addresses SET address_type='street' WHERE street NOT IN (SELECT name FROM bev_localities);")
+
+        # Remove " ,alle [geraden|ungeraden] Zahlen des Intervalls" strings from the house numbers.
+        cursor.execute(
+            "UPDATE bev_addresses SET house_number=split_part(house_number, ' ,alle', 1) WHERE house_number LIKE '%Intervall%';"
+        )
     except Exception as e:
         print("Cannot set the address type! The exception was: %s" % (e,))
         conn.rollback()
         conn.close()
         sys.exit(1)
+
 
     # Commit all changes and close the connection.
     conn.commit()
