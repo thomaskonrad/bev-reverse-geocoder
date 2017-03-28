@@ -24,6 +24,10 @@ CREATE TABLE bev_addresses
 -- Create an index on the 'point' column to speed up reverse geocoding.
 CREATE INDEX bev_addresses_point ON bev_addresses USING GIST (point);
 
+-- Other indices.
+CREATE INDEX bev_addresses_street ON bev_addresses(street);
+CREATE INDEX bev_addresses_house_number ON bev_addresses(house_number);
+
 -- Create the table with all localities.
 CREATE TABLE bev_localities
 (
