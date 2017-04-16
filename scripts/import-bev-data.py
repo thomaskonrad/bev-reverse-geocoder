@@ -84,26 +84,25 @@ def main():
                 else:
                     print(
                         "There is something wrong with this line: '%s'. Please check if the column count is 7 and the data types are correct." % line)
+
+        try:
+            print("Mark addresses that have an associated locality in the BEV database as type 'place'.")
+            # Make an "educated guess" about whether the address contains a proper street or a locality as the street name.
+            cursor.execute(
+                "UPDATE bev_addresses SET address_type='place'  WHERE street     IN (SELECT name FROM bev_localities);")
+            cursor.execute(
+                "UPDATE bev_addresses SET address_type='street' WHERE street NOT IN (SELECT name FROM bev_localities);")
+
+            # Execute the data correction SQL script.
+            print("Executing data correction script.")
+            cursor.execute(open("correct-data.sql", "r").read())
+        except Exception as e:
+            print("Cannot set the address type! The exception was: %s" % (e,))
+            conn.rollback()
+            conn.close()
+            sys.exit(1)
     else:
         print("Unable to open the file '%s' as it does not exist." % args.file)
-
-    try:
-        # Make an "educated guess" about whether the address contains a proper street or a locality as the street name.
-        cursor.execute(
-            "UPDATE bev_addresses SET address_type='place'  WHERE street     IN (SELECT name FROM bev_localities);")
-        cursor.execute(
-            "UPDATE bev_addresses SET address_type='street' WHERE street NOT IN (SELECT name FROM bev_localities);")
-
-        # Remove " ,alle [geraden|ungeraden] Zahlen des Intervalls" strings from the house numbers.
-        cursor.execute(
-            "UPDATE bev_addresses SET house_number=split_part(house_number, ' ,alle', 1) WHERE house_number LIKE '%Intervall%';"
-        )
-    except Exception as e:
-        print("Cannot set the address type! The exception was: %s" % (e,))
-        conn.rollback()
-        conn.close()
-        sys.exit(1)
-
 
     # Commit all changes and close the connection.
     conn.commit()

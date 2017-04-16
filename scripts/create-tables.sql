@@ -25,6 +25,7 @@ CREATE TABLE bev_addresses
 CREATE INDEX bev_addresses_point ON bev_addresses USING GIST (point);
 
 -- Other indices.
+CREATE INDEX bev_addresses_municipality ON bev_addresses(municipality);
 CREATE INDEX bev_addresses_street ON bev_addresses(street);
 CREATE INDEX bev_addresses_house_number ON bev_addresses(house_number);
 
