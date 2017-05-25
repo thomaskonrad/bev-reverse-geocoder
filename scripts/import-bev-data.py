@@ -31,10 +31,10 @@ def main():
     # Try to connect
     try:
         conn = psycopg2.connect(
-                host=args.hostname,
-                database=args.database,
-                user=args.user,
-                password=args.password
+            host=args.hostname,
+            database=args.database,
+            user=args.user,
+            password=args.password
         )
     except Exception as e:
         print("I am unable to connect to the database (%s)." % e.message)
@@ -53,7 +53,6 @@ def main():
             print("Unable to insert the date. Is the format correct?")
             sys.exit(1)
 
-
         # Drop all data
         try:
             statement = "TRUNCATE TABLE " + args.table
@@ -68,13 +67,16 @@ def main():
             next(f)
 
             for line in csv.reader(f, quotechar='"', delimiter=";", quoting=csv.QUOTE_MINIMAL):
-                statement = "INSERT INTO " + args.table + " VALUES (%s, %s, %s, %s, %s, null, ST_SetSRID(ST_MakePoint(%s, %s),4326))"
+                statement = "INSERT INTO " + \
+                            args.table + \
+                            "(municipality, locality, postcode, street, house_number, house_name, address_type, point)" \
+                            "VALUES (%s, %s, %s, %s, %s, %s, 'unknown', ST_SetSRID(ST_MakePoint(%s, %s),4326))"
 
                 # Do some basic data validation.
-                if len(line) == 7 and is_float(line[5]) and is_float(line[6]):
+                if len(line) == 10 and is_float(line[8]) and is_float(line[9]):
                     try:
                         cursor.execute(statement, (
-                            line[0], int(line[1]), line[2], line[3], line[4], line[5], line[6],)
+                            line[0], line[1], int(line[2]), line[3], line[6], line[7], line[8], line[9],)
                                        )
                     except Exception as e:
                         print("I can't insert the row '%s'! The exception was: %s" % (line, e,))
@@ -83,16 +85,9 @@ def main():
                         sys.exit(1)
                 else:
                     print(
-                        "There is something wrong with this line: '%s'. Please check if the column count is 7 and the data types are correct." % line)
+                        "There is something wrong with this line: '%s'. Please check if the column count is 8 and the data types are correct." % line)
 
         try:
-            print("Mark addresses that have an associated locality in the BEV database as type 'place'.")
-            # Make an "educated guess" about whether the address contains a proper street or a locality as the street name.
-            cursor.execute(
-                "UPDATE bev_addresses SET address_type='place'  WHERE street     IN (SELECT name FROM bev_localities);")
-            cursor.execute(
-                "UPDATE bev_addresses SET address_type='street' WHERE street NOT IN (SELECT name FROM bev_localities);")
-
             # Execute the data correction SQL script.
             print("Executing data correction script.")
             cursor.execute(open("correct-data.sql", "r").read())

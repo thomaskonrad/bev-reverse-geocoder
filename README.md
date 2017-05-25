@@ -69,7 +69,7 @@ In order to import the data into the database, execute the ``scripts/create-tabl
 database instance first. This script deletes all relevant tables (if they exist) and then creates them.
 
 To download and convert the data into a usable format, use the
-[convert-bev-address-data-python](https://github.com/scubbx/convert-bev-address-data-python) script of the user
+[convert-bev-address-data-python](https://github.com/thomaskonrad/convert-bev-address-data-python) script of the user
 _scubbx_. Before you run the Python script, install the modules ``gdal`` and ``argparse`` by issuing the command
 ``pip install gdal argparse``. The script downloads the data from BEV and converts it into EPSG 4326 by issuing the
 following command:
