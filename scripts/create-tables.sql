@@ -1,7 +1,6 @@
 -- Drop the tables first if it exists. This allows copy-pasting this entire file in any case.
 DROP TABLE IF EXISTS bev_date;
 DROP TABLE IF EXISTS bev_addresses;
-DROP TABLE IF EXISTS bev_localities;
 
 -- Create the date table.
 CREATE TABLE bev_date
