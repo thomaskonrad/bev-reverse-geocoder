@@ -67,6 +67,16 @@ gives the following result:
 }
 ```
 
+Municipalities With Ambiguous Addresses
+---------------------------------------
+
+Some municipalities have a specific combination of postcode and street multiple times in several localities. For
+example, the street "Feldgasse" in the municipality of Großebersdorf with the the postcode 2203 exists four times,
+namely in the localities Eibesbrunn, Großebersdorf, Manhartsbrunn, and Putzing. If this is the case, we need to set the
+`addr:city` tag to the value of the locality and not the municipality so that the address is unique. If there is one
+such case in a municipality, all addresses in the municipality have the locality in the `addr:city` tag (such
+municipalities get the attribute `municipality_has_ambiguous_addresses`).
+
 Requirements
 ------------
 
