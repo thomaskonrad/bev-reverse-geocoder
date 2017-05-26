@@ -61,12 +61,30 @@ def main():
             print("Could not drop table data (%s)!" % e)
             sys.exit(1)
 
+        # Count the lines in the file
+        with open(args.file) as myfile:
+            total_addresses = sum(1 for line in myfile if line.rstrip('\n')) - 1
+
         # Iterate through the file and insert rows.
         with open(args.file) as f:
             # Skip the first line as it contains only the header.
             next(f)
 
+            previous_percentage = 0
+            i = 0
+
             for line in csv.reader(f, quotechar='"', delimiter=";", quoting=csv.QUOTE_MINIMAL):
+                # Print the percentage. Taken from https://github.com/scubbx/convert-bev-address-data-python/blob/master/convert-addresses.py
+                current_percentage = round(float(i) / total_addresses * 100, 2)
+                if current_percentage != previous_percentage:
+                    # Draw a nice progess bar
+                    sys.stdout.write("\r{} %   ".format(str(current_percentage).ljust(6)))
+                    sys.stdout.write('[{}]'.format(('#' * int(current_percentage / 2)).ljust(50)))
+                    sys.stdout.flush()
+                    previous_percentage = current_percentage
+
+                i += 1
+
                 statement = "INSERT INTO " + \
                             args.table + \
                             "(municipality, locality, postcode, street, house_number, house_name, address_type, point)" \
