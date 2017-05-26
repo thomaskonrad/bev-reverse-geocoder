@@ -89,7 +89,8 @@ following command:
 This outputs a file called ``bev_addressesEPSG4326.csv``. We can now use this file to import the address data into our
 PostgreSQL database:
 
-    python scripts/import-bev-data.py -d gis -f /path/to/bev_addressesEPSG4326.csv -D "2016-10-02"
+    cd scripts/
+    python import-bev-data.py -d gis -f /path/to/bev_addressesEPSG4326.csv -D "2016-10-02"
 
 With the ``-D`` parameter you can specify the date the data was released in the format ``YYYY-MM-DD``. This is important
 for the correct copyright statement when using the data in OpenStreetMap.
