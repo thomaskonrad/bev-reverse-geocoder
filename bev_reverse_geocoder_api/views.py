@@ -125,9 +125,10 @@ def reverse_geocode(request, format):
         return HttpResponseServerError(get_response_content(result, format), content_type=get_content_type(format))
 
     statement = """
-        select b.municipality, b.postcode, b.street, b.house_number, b.house_name, b.address_type,
+        select b.municipality, b.locality, b.postcode, b.street, b.house_number, b.house_name, b.address_type,
           ST_Distance(ST_SetSRID(ST_MakePoint(%s, %s),%s), b.point) as distance,
-          ST_X(ST_Transform(point::geometry, %s)) as lon, ST_Y(ST_Transform(point::geometry, %s)) as lat
+          ST_X(ST_Transform(point::geometry, %s)) as lon, ST_Y(ST_Transform(point::geometry, %s)) as lat,
+          municipality_has_ambiguous_addresses
         from bev_addresses b
         where ST_DWithin(ST_SetSRID(ST_MakePoint(%s, %s),%s), b.point, %s)
         order by distance

@@ -31,44 +31,50 @@
             <pre>https://bev-reverse-geocoder.thomaskonrad.at/reverse-geocode/json?lat=48.20808&lon=16.37236&distance=50&limit=3&epsg=4326</pre>
 
     <pre>{
+   "status":"ok",
    "copyright":"\u00a9 \u00d6sterreichisches Adressregister 2017, N 23806/2017 (Stichtagsdaten vom {{ date }})",
    "address_date": "2016-10-02",
    "results":[
       {
-         "lon":16.372235,
+         "address_type:"street",
          "municipality":"Wien",
-         "house_name":"",
-         "distance":14.22375697,
+         "locality": "Innere Stadt",
+         "postcode":"1010",
          "street":"Stephansplatz",
+         "house_name":"",
          "house_number":"2",
-         "address_type":"street",
-         "postcode":"1010",
-         "lat":48.208111
+         "lat":48.208111,
+         "lon":16.372235,
+         "distance":9.909445594,
+         "municipality_has_ambiguous_addresses": false
       },
       {
-         "lon":16.372354,
+         "address_type:"street",
          "municipality":"Wien",
-         "house_name":"",
-         "distance":19.98897208,
-         "street":"Singerstra\u00dfe",
-         "house_number":"3",
-         "address_type":"street",
+         "locality": "Innere Stadt",
          "postcode":"1010",
-         "lat":48.207893
-      },
-      {
-         "lon":16.372547,
-         "municipality":"Wien",
-         "house_name":"",
-         "distance":20.721456927,
          "street":"Stephansplatz",
          "house_number":"3A",
-         "address_type":"street",
+         "house_name":"",
+         "lat":16.372547,
+         "lon":48.20809,
+         "distance":13.943139329,
+         "municipality_has_ambiguous_addresses": false
+      },
+      {
+         "address_type:"street",
+         "municipality":"Wien",
+         "locality": "Innere Stadt",
          "postcode":"1010",
-         "lat":48.20809
+         "street":"Stock-im-Eisen-Platz",
+         "house_number":"1",
+         "house_name":"",
+         "lat":16.372116,
+         "lon":48.208116,
+         "distance":18.571775123,
+         "municipality_has_ambiguous_addresses": false
       }
-   ],
-   "status":"ok"
+   ]
 }</pre>
         </div>
         <div class="tab-pane" id="xml">
@@ -83,37 +89,43 @@
     &lt;address_date&gt;2016-10-02&lt;/address_date&gt;
     &lt;results>
         &lt;address&gt;
-            &lt;lon&gt;16.372235&lt;/lon&gt;
+            &lt;address_type&gt;street&lt;/address_type&gt;
             &lt;municipality&gt;Wien&lt;/municipality&gt;
-            &lt;house_name /&gt;
-            &lt;distance&gt;14.22375697&lt;/distance&gt;
+            &lt;locality&gt;Innere Stadt&lt;/locality&gt;
+            &lt;postcode&gt;1010&lt;/postcode&gt;
             &lt;street&gt;Stephansplatz&lt;/street&gt;
             &lt;house_number&gt;2&lt;/house_number&gt;
-            &lt;address_type&gt;street&lt;/address_type&gt;
-            &lt;postcode&gt;1010&lt;/postcode&gt;
+            &lt;house_name /&gt;
             &lt;lat&gt;48.208111&lt;/lat&gt;
+            &lt;lon&gt;16.372235&lt;/lon&gt;
+            &lt;distance&gt;14.22375697&lt;/distance&gt;
+            <municipality_has_ambiguous_addresses>False</municipality_has_ambiguous_addresses>
         &lt;/address&gt;
         &lt;address&gt;
-            &lt;lon&gt;16.372354&lt;/lon&gt;
+            &lt;address_type&gt;street&lt;/address_type&gt;
             &lt;municipality&gt;Wien&lt;/municipality&gt;
-            &lt;house_name /&gt;
-            &lt;distance&gt;19.98897208&lt;/distance&gt;
+            &lt;locality&gt;Innere Stadt&lt;/locality&gt;
+            &lt;postcode&gt;1010&lt;/postcode&gt;
             &lt;street&gt;Singerstraße&lt;/street&gt;
             &lt;house_number&gt;3&lt;/house_number&gt;
-            &lt;address_type&gt;street&lt;/address_type&gt;
-            &lt;postcode&gt;1010&lt;/postcode&gt;
+            &lt;house_name /&gt;
             &lt;lat&gt;48.207893&lt;/lat&gt;
+            &lt;lon&gt;16.372354&lt;/lon&gt;
+            &lt;distance&gt;19.98897208&lt;/distance&gt;
+            <municipality_has_ambiguous_addresses>False</municipality_has_ambiguous_addresses>
         &lt;/address&gt;
         &lt;address&gt;
-            &lt;lon&gt;16.372547&lt;/lon&gt;
+            &lt;address_type&gt;street&lt;/address_type&gt;
             &lt;municipality&gt;Wien&lt;/municipality&gt;
-            &lt;house_name /&gt;
-            &lt;distance&gt;20.721456927&lt;/distance&gt;
+            &lt;locality&gt;Innere Stadt&lt;/locality&gt;
+            &lt;postcode&gt;1010&lt;/postcode&gt;
             &lt;street&gt;Stephansplatz&lt;/street&gt;
             &lt;house_number&gt;3A&lt;/house_number&gt;
-            &lt;address_type&gt;street&lt;/address_type&gt;
-            &lt;postcode&gt;1010&lt;/postcode&gt;
+            &lt;house_name /&gt;
             &lt;lat&gt;48.20809&lt;/lat&gt;
+            &lt;lon&gt;16.372547&lt;/lon&gt;
+            &lt;distance&gt;20.721456927&lt;/distance&gt;
+            <municipality_has_ambiguous_addresses>False</municipality_has_ambiguous_addresses>
         &lt;/address&gt;
     &lt;/results&gt;
     &lt;status&gt;ok&lt;/status&gt;

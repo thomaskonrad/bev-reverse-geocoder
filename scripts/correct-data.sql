@@ -1,3 +1,6 @@
+-- Delete addresses with no house number.
+DELETE FROM bev_addresses WHERE house_number = '';
+
 -- Mark addresses that have an associated locality in the BEV database as type "place".
 UPDATE bev_addresses SET address_type='place'  WHERE street IN (SELECT DISTINCT(locality) FROM bev_addresses);
 
@@ -218,7 +221,7 @@ WHERE
 
 
 -- Remove " ,alle [geraden|ungeraden] Zahlen[ des Intervalls]" strings from the house numbers.
-UPDATE bev_addresses SET house_number=split_part(house_number, ' ,alle', 1)
+UPDATE bev_addresses SET house_number=split_part(house_number, ', alle', 1)
   WHERE house_number LIKE '%alle geraden%'
   OR house_number LIKE '%alle ungeraden%';
 
@@ -232,3 +235,58 @@ UPDATE bev_addresses SET street = 'Bahnstraße' WHERE municipality = 'Ebreichsdo
 -- can be found in the "locality" column anyway.
 UPDATE bev_addresses SET street=split_part(street, ', ', 1)
   WHERE municipality = 'Wildschönau';
+
+-- Some bigger cities have their own districts, and those are set as the locality in the BEV data set. However, in
+-- OpenStreetMap, the addr:city tag in Vienna, Graz, Innsbruck, and Klagenfurt am Wörtersee, etc. are set to the name of
+-- the city, not the district. Some other cities like Leonding and Klosterneuburg have smaller localities around the
+-- city, but even there the city name is taken for addr:city.
+/* UPDATE bev_addresses SET locality = municipality
+  WHERE municipality IN (
+    'Wien', 'Graz', 'Innsbruck', 'Klagenfurt am Wörthersee', 'Villach', 'Wels', 'Bregenz', 'Leonding', 'Klosterneuburg',
+    'Leoben', 'Krems an der Donau', 'Traun', 'Kapfenberg', 'Hallein', 'Kufstein', 'Braunau am Inn'
+  )
+  -- There are some exceptions, for example, Ranshofen in the municipality of Braunau am Inn is mostly mentioned as the
+  -- city in addresses instead of the municipality name "Braunau am Inn".
+  AND locality NOT IN (
+    'Ranshofen'
+  );*/
+
+-- Set the column "municipality_has_ambiguous_addresses" to TRUE for addresses in municipalities that have ambiguous
+-- addresses. This happens if one municipality has a specific combination of postcode and street distributed over
+-- multiple localities (see Amstetten, for example). This is important because then, we need to set the "addr:city" tag
+-- to the value of the locality and not the municipality so that the address is unique.
+UPDATE bev_addresses
+SET municipality_has_ambiguous_addresses = TRUE
+WHERE municipality IN (
+  SELECT municipality FROM (
+    SELECT DISTINCT
+      municipality,
+      string_agg(locality, ', ' ORDER BY locality) AS localities,
+      postcode,
+      street,
+      COUNT(DISTINCT(locality))
+    FROM
+      bev_addresses
+    GROUP BY
+      municipality,
+      postcode,
+      street,
+      house_number
+    HAVING
+      COUNT(DISTINCT(locality)) > 1
+  ) as non_unique_addresses
+);
+
+-- Clean up the locality strings of the cities of Vienna, Graz, and Klagenfurt
+UPDATE bev_addresses SET locality = split_part(locality, ',', 2)
+  WHERE municipality = 'Wien';
+
+UPDATE bev_addresses SET locality = split_part(locality, ':', 2)
+  WHERE municipality = 'Graz';
+
+UPDATE bev_addresses SET locality = split_part(locality, ':', 2)
+  WHERE municipality = 'Klagenfurt am Wörthersee';
+
+-- This one is abbreviated in the BEV dataset.
+UPDATE bev_addresses SET locality = 'Völkermarkter Vorstadt'
+  WHERE locality = 'Völkermarkt.Vorst.';

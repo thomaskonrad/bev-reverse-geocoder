@@ -21,39 +21,49 @@ gives the following result:
 ```
 {
    "status":"ok",
+   "copyright":"\u00a9 \u00d6sterreichisches Adressregister 2017, N 23806/2017 (Stichtagsdaten vom {{ date }})",
+   "address_date": "2016-10-02",
    "results":[
       {
-         "distance":9.909445594,
+         "address_type:"street",
+         "municipality":"Wien",
+         "locality": "Innere Stadt",
+         "postcode":"1010",
+         "street":"Stephansplatz",
          "house_name":"",
          "house_number":"2",
-         "municipality":"Wien",
-         "lon":16.372235,
-         "street":"Stephansplatz ",
-         "postcode":"1010",
          "lat":48.208111,
+         "lon":16.372235,
+         "distance":9.909445594,
+         "municipality_has_ambiguous_addresses": false
       },
       {
-         "distance":13.943139329,
-         "house_name":"",
+         "address_type:"street",
+         "municipality":"Wien",
+         "locality": "Innere Stadt",
+         "postcode":"1010",
+         "street":"Stephansplatz",
          "house_number":"3A",
-         "municipality":"Wien",
+         "house_name":"",
          "lat":16.372547,
-         "street":"Stephansplatz ",
-         "postcode":"1010",
-         "lon":48.20809
+         "lon":48.20809,
+         "distance":13.943139329,
+         "municipality_has_ambiguous_addresses": false
       },
       {
-         "distance":18.571775123,
-         "house_name":"",
-         "house_number":"1",
+         "address_type:"street",
          "municipality":"Wien",
-         "lat":16.372116,
-         "street":"Stock-im-Eisen-Platz ",
+         "locality": "Innere Stadt",
          "postcode":"1010",
-         "lon":48.208116
+         "street":"Stock-im-Eisen-Platz",
+         "house_number":"1",
+         "house_name":"",
+         "lat":16.372116,
+         "lon":48.208116,
+         "distance":18.571775123,
+         "municipality_has_ambiguous_addresses": false
       }
-   ],
-   "copyright":"\u00a9 \u00d6sterreichisches Adressregister 2017, N 23806/2017 (Stichtagsdaten vom 02.10.2016)"
+   ]
 }
 ```
 

@@ -18,6 +18,7 @@ CREATE TABLE bev_addresses
   house_number character varying,
   house_name character varying,
   address_type character varying,
+  municipality_has_ambiguous_addresses boolean NOT NULL DEFAULT FALSE,
   point geography(Point,4326) NOT NULL
 );
 
