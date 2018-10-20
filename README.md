@@ -1,24 +1,20 @@
-BEV Address Data Reverse Geocoder
-=================================
+# BEV Address Data Reverse Geocoder
 
-This services converts coordinates into an array of address data sets released by the Bundesamt für Eich- und
-Vermessungswesen (BEV) in Austria. You can see the service in action and an API description
-[here](https://bev-reverse-geocoder.thomaskonrad.at/).
+This services converts coordinates into an array of address data sets released by the Bundesamt für Eich- und Vermessungswesen (BEV) in Austria. You can see the service in action and an API description [here](https://bev-reverse-geocoder.thomaskonrad.at/).
 
 Data: © Österreichisches Adressregister 2017, N 23806/2017 (Stichtagsdaten vom 02.10.2016)
 
-Example
--------
+## Example
 
 The request
 
-```
+```http
 https://bev-reverse-geocoder.thomaskonrad.at/reverse-geocode/json?lat=48.20808&lon=16.37236&distance=50&limit=3&epsg=4326
 ```
 
 gives the following result:
 
-```
+```json
 {
    "status":"ok",
    "copyright":"\u00a9 \u00d6sterreichisches Adressregister 2017, N 23806/2017 (Stichtagsdaten vom {{ date }})",
@@ -67,46 +63,33 @@ gives the following result:
 }
 ```
 
-Municipalities With Ambiguous Addresses
----------------------------------------
+## Municipalities With Ambiguous Addresses
 
-Some municipalities have a specific combination of postcode and street multiple times in several localities. For
-example, the street "Feldgasse" in the municipality of Großebersdorf with the the postcode 2203 exists four times,
-namely in the localities Eibesbrunn, Großebersdorf, Manhartsbrunn, and Putzing. If this is the case, we need to set the
-`addr:city` tag to the value of the locality and not the municipality so that the address is unique. If there is one
-such case in a municipality, all addresses in the municipality have the locality in the `addr:city` tag (such
-municipalities get the attribute `municipality_has_ambiguous_addresses`).
+Some municipalities have a specific combination of postcode and street multiple times in several localities. For example, the street “Feldgasse” in the municipality of Großebersdorf with the postcode 2203 exists four times, namely in the localities Eibesbrunn, Großebersdorf, Manhartsbrunn, and Putzing. If this is the case, we need to set the `addr:city` tag to the value of the locality and not the municipality so that the address is unique. If there is one such case in a municipality, all addresses in the municipality have the locality in the `addr:city` tag (such municipalities get the attribute `municipality_has_ambiguous_addresses`).
 
-Requirements
-------------
+## Requirements
 
 This Python Django project requires Django 1.10.*.
 
-Importing the Addresses into PostgreSQL
----------------------------------------
+## Importing the Addresses into PostgreSQL
 
-In order to import the data into the database, execute the ``scripts/create-tables.sql`` script on your PostgreSQL
-database instance first. This script deletes all relevant tables (if they exist) and then creates them.
+In order to import the data into the database, execute the `scripts/create-tables.sql` script on your PostgreSQL database instance first. This script deletes all relevant tables (if they exist) and then creates them.
 
-To download and convert the data into a usable format, use the
-[convert-bev-address-data-python](https://github.com/thomaskonrad/convert-bev-address-data-python) script of the user
-_scubbx_. Before you run the Python script, install the modules ``gdal`` and ``argparse`` by issuing the command
-``pip install gdal argparse``. The script downloads the data from BEV and converts it into EPSG 4326 by issuing the
-following command:
+To download and convert the data into a usable format, use the [convert-bev-address-data-python](https://github.com/thomaskonrad/convert-bev-address-data-python) script of the user _scubbx_. Before you run the Python script, install the modules ``gdal`` and ``argparse`` by issuing the command ``pip install gdal argparse``. The script downloads the data from BEV and converts it into EPSG 4326 by issuing the following command:
 
-    python convert-addresses.py -epsg 4326
+```shell
+python convert-addresses.py -epsg 4326
+```
 
-This outputs a file called ``bev_addressesEPSG4326.csv``. We can now use this file to import the address data into our
-PostgreSQL database:
+This outputs a file called `bev_addressesEPSG4326.csv`. We can now use this file to import the address data into our PostgreSQL database:
 
-    cd scripts/
-    python import-bev-data.py -d gis -f /path/to/bev_addressesEPSG4326.csv -D "2016-10-02"
+```shell
+cd scripts/
+python import-bev-data.py -d gis -f /path/to/bev_addressesEPSG4326.csv -D "2016-10-02"
+```
 
-With the ``-D`` parameter you can specify the date the data was released in the format ``YYYY-MM-DD``. This is important
-for the correct copyright statement when using the data in OpenStreetMap.
+With the `-D` parameter you can specify the date the data was released in the format `YYYY-MM-DD`. This is important for the correct copyright statement when using the data in OpenStreetMap.
 
-Using the Data in OpenStreetMap
--------------------------------
+## Using the Data in OpenStreetMap
 
-OpenStreetMap has the [official permission to use the data](https://wiki.openstreetmap.org/wiki/WikiProject_Austria/%C3%96sterreichisches_Adressregister).
-Keep in mind, however, that the data source must be mentioned in the object or changeset source.
+OpenStreetMap has the [official permission to use the data](https://wiki.openstreetmap.org/wiki/WikiProject_Austria/%C3%96sterreichisches_Adressregister). Keep in mind, however, that the data source must be mentioned in the object or changeset source.
