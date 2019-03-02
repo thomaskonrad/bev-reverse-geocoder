@@ -91,7 +91,7 @@ def main():
                             "VALUES (%s, %s, %s, %s, %s, %s, 'unknown', ST_SetSRID(ST_MakePoint(%s, %s),4326))"
 
                 # Do some basic data validation.
-                if len(line) == 10 and is_float(line[8]) and is_float(line[9]):
+                if len(line) == 19 and is_float(line[8]) and is_float(line[9]):
                     try:
                         cursor.execute(statement, (
                             line[0], line[1], int(line[2]), line[3], line[6], line[7], line[8], line[9],)
