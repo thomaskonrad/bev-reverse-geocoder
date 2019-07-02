@@ -12,10 +12,10 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 import environ
 
-env = environ.Env()
-environ.Env.read_env() # reading .env file
-
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env')) # reading .env file
 
 
 # Quick-start development settings - unsuitable for production
