@@ -1,0 +1,3 @@
+[submodule "scripts/convert-bev-address-data-python"]
+	path = scripts/convert-bev-address-data-python
+	url = https://github.com/thomaskonrad/convert-bev-address-data-python
