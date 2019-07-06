@@ -1,7 +1,8 @@
 FROM alpine:latest
 
 RUN apk update
-RUN apk add bash \
+RUN apk add --no-cache \
+    bash \
 	git \
 	python3 \
 	python3-dev \
@@ -11,10 +12,16 @@ RUN apk add bash \
 	postgresql-dev \
 	musl-dev \
 	nginx \
+	postgresql \
+	postgresql-client \
 	supervisor && \
 	python3 -m ensurepip
 
-RUN pip3 install uwsgi
+# Edge testing packages
+RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+    postgis
+
+RUN pip3 install uwsgi requests pyproj==1.9.6
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx-app.conf /etc/nginx/sites-available/default
@@ -24,6 +31,10 @@ COPY requirements.txt /home/docker/code/app/
 RUN pip3 install -r /home/docker/code/app/requirements.txt
 
 COPY . /home/docker/code/
+
+# Download and process the BEV address data
+RUN cd /home/docker/code/scripts/convert-bev-address-data-python/ && \
+    python3 convert-addresses.py -epsg 4326 -compatibility_mode
 
 WORKDIR /home/docker/
 EXPOSE 8080
