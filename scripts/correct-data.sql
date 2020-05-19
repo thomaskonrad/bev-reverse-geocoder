@@ -290,3 +290,10 @@ UPDATE bev_addresses SET locality = split_part(locality, ':', 2)
 -- This one is abbreviated in the BEV dataset.
 UPDATE bev_addresses SET locality = 'Völkermarkter Vorstadt'
   WHERE locality = 'Völkermarkt.Vorst.';
+
+-- In Carinthia's municipality of Frauenstein, most streets are named like "<hamlet>/<street>". The following
+-- statement corrects this to simply "<street>".
+UPDATE bev_addresses SET street=split_part(street, '/', 2) WHERE municipality='Frauenstein' and street like '%/%';
+
+-- In the same municipality, there are streets that end with "-W.". The followin statement corrects this to "-Weg".
+UPDATE bev_addresses SET street=replace(street, '-W.', '-Weg') WHERE municipality='Frauenstein' AND street LIKE '%-W.';
