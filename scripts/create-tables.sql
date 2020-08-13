@@ -16,6 +16,7 @@ CREATE TABLE bev_addresses
   postcode character varying NOT NULL,
   street character varying NOT NULL,
   house_number character varying,
+  subaddress character varying,
   house_name character varying,
   address_type character varying,
   municipality_has_ambiguous_addresses boolean NOT NULL DEFAULT FALSE,
