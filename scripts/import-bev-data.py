@@ -87,15 +87,22 @@ def main():
 
                 statement = "INSERT INTO " + \
                             args.table + \
-                            "(municipality, locality, postcode, street, house_number, house_name, address_type, point)" \
-                            "VALUES (%s, %s, %s, %s, %s, %s, 'unknown', ST_SetSRID(ST_MakePoint(%s, %s),4326))"
+                            "(municipality, locality, postcode, street, house_number, subaddress, house_name, address_type, point)" \
+                            "VALUES (%s, %s, %s, %s, %s, %s, %s, 'unknown', ST_SetSRID(ST_MakePoint(%s, %s),4326))"
 
                 # Do some basic data validation.
-                if len(line) == 19 and is_float(line[8]) and is_float(line[9]):
+                if len(line) == 19 and (is_float(line[8]) or is_float(line[11])) and (is_float(line[9]) or is_float(line[12])):
                     try:
-                        cursor.execute(statement, (
-                            line[0], line[1], int(line[2]), line[3], line[6], line[7], line[8], line[9],)
-                                       )
+                        # if haus_x is not float, use adress_x adress_y
+                        if is_float(line[8]):
+                            cursor.execute(statement, (
+                                line[0], line[1], int(line[2]), line[3], line[6], line[13], line[7], line[8], line[9],)
+                           )
+                        else:
+                            cursor.execute(statement, (
+                                line[0], line[1], int(line[2]), line[3], line[6], line[13], line[7], line[11], line[12],)
+                           )
+
                     except Exception as e:
                         print("I can't insert the row '%s'! The exception was: %s" % (line, e,))
                         conn.rollback()
